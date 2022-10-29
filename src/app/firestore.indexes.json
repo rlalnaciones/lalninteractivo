@@ -1,0 +1,19 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "item",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "id_configuracion",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "id_item",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

@@ -1,0 +1,31 @@
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { ConfiguracionCreateComponent } from './components/configuracion-create/configuracion-create.component';
+import { ConfiguracionListComponent } from './components/configuracion-list/configuracion-list.component';
+import { ItemdetCreateComponent } from './components/itemdet-create/itemdet-create.component';
+import { ItemdetListComponent } from './components/itemdet-list/itemdet-list.component';
+import { JuegoComponent } from './components/juego/juego.component';
+import { PartidaCreateComponent } from './components/partida-create/partida-create.component';
+import { PartidaListComponent } from './components/partida-list/partida-list.component';
+
+const routes: Routes = [
+  { path: '', redirectTo: 'configuracion-list', pathMatch: 'full' },
+  { path: 'juego/:id', component:JuegoComponent},
+  { path: 'configuracion-list', component:ConfiguracionListComponent},
+  { path: 'configuracionEdit/:id',component:ConfiguracionCreateComponent},
+  { path: 'configuracionCreate',component:ConfiguracionCreateComponent},
+  { path: 'itemdet-list', component:ItemdetListComponent},
+  { path: 'itemdet-create',component:ItemdetCreateComponent},
+  { path: 'itemdetEdit/:id',component:ItemdetCreateComponent},
+  { path: 'partida-list', component:PartidaListComponent},
+  { path: 'partidaCreate',component:PartidaCreateComponent},
+  { path: 'partidaEdit/:id',component:ItemdetCreateComponent},
+  { path: '**', redirectTo: 'configuracion-list', pathMatch: 'full' }
+
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }

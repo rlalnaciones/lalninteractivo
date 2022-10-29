@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "lalnmaterial": {
+      "hosting": {
+        "lalninteractivo": [
+          "lalnmaterial"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "lalnmaterial"
+  }
+}

@@ -1,0 +1,60 @@
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <h3 style="text-align:center ;">{{ Configuracion?.configuracion }}</h3>
+            <div *ngIf="preguntas.length > 0">
+                <h3 style="text-align:center ;">{{ preguntaActual.item }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="card" *ngIf="respuestas.length > 0">
+        <div class="card-body">
+            <!-- <tr *ngFor="let respuesta of respuestas">
+                <button type="button" class="btn btn-primary" (click)="siguientePregunta()">{{ respuesta.item_det }}</button>                            
+            </tr>  -->
+            <div *ngFor="let respuesta of respuestas; let i = index" [attr.data-index]="i" (click)="siguientePregunta()"
+                class="Basic mixed styles example col-12">
+                <div *ngIf="i == 0" class="btn btn-primary col-12">
+                    <span style="font-size:40px;font-weight:bold; text-align: left;">{{i+1}}. </span>
+                    <label style="font-size:40px;font-weight:bold;">{{ respuesta.item_det }}</label>
+                </div>
+                <div *ngIf="i == 1" class="btn btn-warning col-12">
+                    <label style="font-size:40px;font-weight:bold;">{{i+1}}. </label>
+                    <label style="font-size:40px;font-weight:bold;">{{ respuesta.item_det }}</label>
+                </div>
+
+                <div *ngIf="i == 2" class="btn btn-success col-12">
+                    <label style="font-size:40px;font-weight:bold;">{{i+1}}. </label>
+                    <label style="font-size:40px;font-weight:bold;">{{ respuesta.item_det }}</label>
+                </div>
+                <div *ngIf="i == 3" class="btn btn-danger col-12">
+                    <label style="font-size:40px;font-weight:bold;">{{i+1}}. </label>
+                    <label style="font-size:40px;font-weight:bold;">{{ respuesta.item_det }}</label>
+                </div>
+                <div *ngIf="i == 4" class="btn btn-secondary col-12">
+                    <label style="font-size:40px;font-weight:bold;">{{i+1}}. </label>
+                    <label style="font-size:40px;font-weight:bold;">{{ respuesta.item_det }}</label>
+                </div>
+                <div *ngIf="i == 5" class="btn btn-primary col-12">
+                    <label style="font-size:40px;font-weight:bold;">{{i+1}}. </label>
+                    <label style="font-size:40px;font-weight:bold;">{{ respuesta.item_det }}</label>
+                </div>
+                <div *ngIf="i == 6" class="btn btn-secondary col-12">
+                    <label style="font-size:40px;font-weight:bold;">{{i+1}}. </label>
+                    <label style="font-size:40px;font-weight:bold;">{{ respuesta.item_det }}</label>
+                </div>
+                <div *ngIf="i == 7" class="btn btn-success col-12">
+                    <label style="font-size:40px;font-weight:bold;">{{i+1}}. </label>
+                    <label style="font-size:40px;font-weight:bold;">{{ respuesta.item_det }}</label>
+                </div>
+                <div *ngIf="i == 8" class="btn btn-danger col-12">
+                    <label style="font-size:40px;font-weight:bold;">{{i+1}}. </label>
+                    <label style="font-size:40px;font-weight:bold;">{{ respuesta.item_det }}</label>
+                </div>
+                <div *ngIf="i == 9" class="btn btn-warning col-12">
+                    <label style="font-size:40px;font-weight:bold;">{{i+1}}. </label>
+                    <label style="font-size:40px;font-weight:bold;">{{ respuesta.item_det }}</label>
+                </div>
+            </div>
+        </div>
+    </div>

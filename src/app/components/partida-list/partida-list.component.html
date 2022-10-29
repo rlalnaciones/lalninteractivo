@@ -1,0 +1,35 @@
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+
+            <span class="h3">Partidas</span>
+            <button class="btn btn-dark btn-lg float-right" routerLink="/partidaCreate">Agregar</button>
+            <img src="./assets/logo_full.jpg" class="rounded float-end" alt="..." width="90" height="90" style="border-radius: 15px; margin-right: 10px;" />
+            <h5 style="margin-top: 30px;" *ngIf="partidas.length == 0">No hay datos para mostrar</h5>
+            <table *ngIf="partidas.length > 0" class="table mt-5 table-striped">
+                <thead>
+                  <tr>
+                    <th>id_partida</th>
+                    <th>partida</th>
+                    <th>estado</th>
+                    <th>id_configuracion</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let partida of partidas">
+                    <td>{{ partida.id_partida }}</td>
+                    <td>{{ partida.partida }}</td>
+                    <td>{{ partida.estado }}</td>
+                    <td>{{ partida.id_configuracion }}</td>
+                    <td><i class="fas fa-puzzle-piece fa-lg mr-2" [routerLink]="['/juego',partida.id]" title="Vista previa"></i>
+                      <i class="fas fa-plus-circle" [routerLink]="['/partidaCreate']" title="Crear partida"></i>
+                        <i class="fas fa-edit fa-lg text-info mr-2" [routerLink]="['/partidaEdit',partida.id]" title="Editar"></i>
+                        <i (click)="eliminarPartida(partida.id)" class="fas fa-trash-alt fa-lg text-danger" title="Eliminar"></i>
+                    </td>
+                  </tr> 
+                </tbody>
+              </table>
+        </div>
+    </div>
+</div>
