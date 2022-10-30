@@ -28,5 +28,7 @@ export class PartidaService {
         getPartida(id: string): Observable<any>{
       return this.firestore.collection('partida').doc(id).snapshotChanges();
     }
-    
+    getPartidaByIdPartida(id_partida: number){
+             return this.firestore.collection('partida',ref => ref.where('partida',"==",id_partida)).valueChanges();
+     }
     }
