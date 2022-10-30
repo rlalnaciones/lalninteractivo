@@ -28,7 +28,8 @@ export class PartidaService {
         getPartida(id: string): Observable<any>{
       return this.firestore.collection('partida').doc(id).snapshotChanges();
     }
+
     getPartidaByIdPartida(id_partida: number){
-             return this.firestore.collection('partida',ref => ref.where('partida',"==",id_partida)).valueChanges();
+      return this.firestore.collection('partida', ref => ref.where('id_partida','==', id_partida).limit(1)).valueChanges({idField: 'id'});
      }
-    }
+  }

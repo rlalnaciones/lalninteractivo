@@ -18,6 +18,7 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { ToastrModule } from 'ngx-toastr';
 import { PartidaListComponent } from './components/partida-list/partida-list.component';
 import { PartidaCreateComponent } from './components/partida-create/partida-create.component';
+import { PuntajePartidaComponent } from './components/puntaje-partida/puntaje-partida.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { PartidaCreateComponent } from './components/partida-create/partida-crea
     ConfiguracionListComponent,
     ConfiguracionCreateComponent,
     PartidaListComponent,
-    PartidaCreateComponent
+    PartidaCreateComponent,
+    PuntajePartidaComponent
   ],
   imports: [
     BrowserModule,

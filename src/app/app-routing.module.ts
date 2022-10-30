@@ -7,6 +7,7 @@ import { ItemdetListComponent } from './components/itemdet-list/itemdet-list.com
 import { JuegoComponent } from './components/juego/juego.component';
 import { PartidaCreateComponent } from './components/partida-create/partida-create.component';
 import { PartidaListComponent } from './components/partida-list/partida-list.component';
+import { PuntajePartidaComponent } from './components/puntaje-partida/puntaje-partida.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'configuracion-list', pathMatch: 'full' },
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'partida-list', component:PartidaListComponent},
   { path: 'partidaCreate',component:PartidaCreateComponent},
   { path: 'partidaEdit/:id',component:ItemdetCreateComponent},
+  { path: 'tablero-partida/:idPartida',component:PuntajePartidaComponent},
   { path: '**', redirectTo: 'configuracion-list', pathMatch: 'full' }
 
 ];

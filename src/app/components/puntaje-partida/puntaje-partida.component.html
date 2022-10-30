@@ -1,0 +1,27 @@
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+          Tablero de Puntación de la Partida
+        </div>
+        <div class="card-body">
+            <h5 class="card-title text-center">{{partida?.partida}}</h5>
+            <table class="table text-center">
+                <thead>
+                  <tr>
+                    <th>Posición</th>
+                    <th>Nombre</th>
+                    <th>Puntaje Actual</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let jugador of jugadores; let i = index" [ngClass]="{'table-primary': i === 0}" class="table-primary">
+                    <th>{{i + 1}}</th>
+                    <td>{{jugador.nombre}}</td>
+                    <td>{{jugador.puntaje}}</td>
+                  </tr>
+                </tbody>
+              </table>
+
+        </div>  
+      </div>
+</div>
