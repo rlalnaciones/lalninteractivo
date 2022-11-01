@@ -30,7 +30,7 @@ export class ItemdetService {
     }
 
 
-    getItemdetByIdItem(id_item: number){
+    getItemdetByIdItem(id_item: number): Observable<any>{
      // console.log(id_item);
             return this.firestore.collection('item_det',ref => ref.where('id_item',"==",id_item)).valueChanges();
 

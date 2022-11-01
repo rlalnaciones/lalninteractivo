@@ -65,7 +65,7 @@ export class JuegoComponent implements OnInit {
       this._ConfiguracionService.getConfiguracion(this.id).subscribe(
         (Configuracion) => {
           this.Configuracion = Configuracion;
-          this._ItemService.getItemByIdConfiguracion(Configuracion.id_configuracion).subscribe(
+          this._ItemService.getItemByIdConfiguracion(Configuracion.id_configuracion,0).subscribe(
             (item: any) => {
               this.preguntas = item;
               this.siguientePregunta();
@@ -132,7 +132,7 @@ export class JuegoComponent implements OnInit {
     if (this.id != null) {
       this._ConfiguracionService.getConfiguracion(this.id).subscribe(
         (Configuracion) => {
-          this._ItemService.getItemByIdConfiguracion(Configuracion.id_configuracion).subscribe(
+          this._ItemService.getItemByIdConfiguracion(Configuracion.id_configuracion,0).subscribe(
             (item) => {
               item.forEach((element: any) => {
                 this._ItemDetService.getItemdetByIdItem(element.payload.doc.id_item).subscribe(

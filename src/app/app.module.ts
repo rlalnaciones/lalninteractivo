@@ -19,6 +19,8 @@ import { ToastrModule } from 'ngx-toastr';
 import { PartidaListComponent } from './components/partida-list/partida-list.component';
 import { PartidaCreateComponent } from './components/partida-create/partida-create.component';
 import { PuntajePartidaComponent } from './components/puntaje-partida/puntaje-partida.component';
+import { PartidaBienvenidaComponent } from './components/partida-bienvenida/partida-bienvenida.component';
+import { JuegouserComponent } from './components/juegouser/juegouser.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { PuntajePartidaComponent } from './components/puntaje-partida/puntaje-pa
     ConfiguracionCreateComponent,
     PartidaListComponent,
     PartidaCreateComponent,
-    PuntajePartidaComponent
+    PuntajePartidaComponent,
+    PartidaBienvenidaComponent,
+    JuegouserComponent
   ],
   imports: [
     BrowserModule,

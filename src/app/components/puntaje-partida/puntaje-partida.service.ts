@@ -11,7 +11,7 @@ export class PuntajePartidaService {
   constructor(private firestore: AngularFirestore) { }
 
   public actualizarTableroPuntajes(idPartida: string): Observable<JugadorPartida[]>{
-    console.log(idPartida);
+    //console.log(idPartida);
     
     return this.firestore
       .collection<JugadorPartida>(`/partida/${idPartida}/jugadores`, ref => ref.orderBy('puntaje','desc'))

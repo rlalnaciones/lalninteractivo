@@ -1,0 +1,16 @@
+<div class="container pt-10">
+  <div class="card text-center" style="width: 100%; align-content: center;">
+    <!-- <img src="..." class="card-img-top" alt="..."> -->
+    <div class="card-body">
+      <!-- <form class="mt 4" [formGroup]="bienvenida" (ngSubmit)="modificar()"></form> -->
+      <h5 class="card-title">Bienvenido!!</h5>
+      <p class="card-text">Ingrese el número de partida</p>
+      <input #txtJugador type="test" class="form-control form control-lg mt-3" 
+        placeholder="Usuario">
+      <input #txtpartida type="number" class="form-control form control-lg mt-3" 
+        placeholder="Número de partida">
+      <!-- <a href="#" class="btn btn-primary" [routerLink]="['/juegouser',txtpartida.value,txtJugador.value]">Jugar!!</a> -->
+      <button class="btn btn-primary btn-lg" (click)="addData(txtJugador.value,txtpartida.value)">Empezar!!</button>
+    </div>
+  </div>
+</div>
