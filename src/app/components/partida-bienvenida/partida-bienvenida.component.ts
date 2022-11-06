@@ -1,43 +1,60 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { concatMap, Observable, of, tap } from 'rxjs';
+import { JugadorPartida } from 'src/app/interfaces/jugador-partida';
 import { ConfiguracionService } from 'src/app/services/configuracion.service';
+import { JugadoresService } from 'src/app/services/jugadores.service';
+import { PartidaService } from 'src/app/services/partida.service';
 
 @Component({
   selector: 'app-partida-bienvenida',
   templateUrl: './partida-bienvenida.component.html'
 })
+
 export class PartidaBienvenidaComponent implements OnInit {
   //parametros para iniciar juego
-    dataSaliente: any[] = [];
+  partidas: any[] = [];
+  dataSaliente: any[] = [];
   idPartida: any = {};
-  jugador: any = {};
-  //bienvenida: FormGroup;
+  idDocPartida: string = '';
+  public partida: any;
+  jugadores: JugadorPartida[] = [];
+  jugador: string = '';
+  public idDocPartida$: Observable<any> | undefined;
 
   constructor(private _ConfiguracionService: ConfiguracionService,
-    private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private _jugadoresService: JugadoresService,
+    private _partidaService: PartidaService
   ) {
-
-    // this.bienvenida = this.fb.group({
-    //   idPartida: ['', Validators.required],
-    //   jugador: ['', Validators.required]
-    // })
-
-    //this.idPartida = this._ConfiguracionService.getIdPartida()
-  }
-
-  addData(jugador: string, idPartida: string) {
-    // console.log('data saliente ...', jugador);
-    // console.log('data saliente ...', idPartida);
-    this.dataSaliente = [jugador, idPartida];
-    console.log('data saliente ...', this.dataSaliente );
-    this._ConfiguracionService.disparadorJuego.emit({ data: this.dataSaliente })
-    this.router.navigate(['/juegouser'])
   }
 
   ngOnInit(): void {
+  }
+
+  agregarJugador(jugador: string, idPartida: string) {
+    this.jugador = jugador;
+    this.idPartida = idPartida;
+    this.obtenerIdDocPartida();
 
   }
 
+  obtenerIdDocPartida() {
+    this._partidaService.getPartidaByIdPartida(Number(this.idPartida))
+    .pipe(
+      tap((data: any) => {  
+        const grJugador: JugadorPartida = {
+          nombre: this.jugador,
+          puntaje: 0
+        };
+        let jugador = this._jugadoresService.agregarJugador(data[0].id, grJugador);
+        jugador.then(result => {
+          this.router.navigate(['/juegouser'])
+        }).catch(error => console.log(error));
+      })
+    )
+    .subscribe();
+  }
+  
 }
