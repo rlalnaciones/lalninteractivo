@@ -20,9 +20,9 @@ export class PuntajePartidaComponent implements OnInit {
     const idPartida: number = Number(this.route.snapshot.paramMap.get("idPartida"));
     this.partidaService.getPartidaByIdPartida(idPartida)
     .pipe(
-      concatMap((data: any) => {  
-      this.partida = data[0]; 
-        return this.puntajeService.actualizarTableroPuntajes(this.partida.id)
+      concatMap(partida => {
+        this.partida = partida.data;
+        return this.puntajeService.actualizarTableroPuntajes(partida.id)
       }),
       tap(data => this.jugadores = data)
     )

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { map, Observable, take } from 'rxjs';
 import { JugadorPartida } from '../interfaces/jugador-partida';
 
 @Injectable({
@@ -10,8 +11,7 @@ export class JugadoresService {
   constructor(private firestore: AngularFirestore) { }
 
   agregarJugador(idDocPartida: string,jugador: JugadorPartida): Promise<any> {
-    console.log(idDocPartida, jugador);
-    
+    //console.log('agregarJugador',idDocPartida,'---', jugador);
     const shirtsCollection = this.firestore.collection<JugadorPartida>(`/partida/${idDocPartida}/jugadores`);
     return shirtsCollection.add(jugador);
      
@@ -20,4 +20,18 @@ export class JugadoresService {
   actualizarJugador(idDocPartida: string,idDocJugador: string, data: any): Promise<any> {
     return this.firestore.collection(`/partida/${idDocPartida}/jugadores`).doc(idDocJugador).update(data);
   }
+
+  getDocJugadoresByJugador(idDocPartida: string,jugador: string): Observable<string> {
+    return this.firestore.collection(`/partida/${idDocPartida}/jugadores`, ref => ref.where('nombre', '==', jugador).limit(1)).snapshotChanges()
+      .pipe(
+        take(1),
+        map(coleccion => {
+          if (coleccion.length > 0) {
+            return coleccion[0].payload.doc.id;
+          }
+          return "";
+        })
+      );
+  }
+
 }
