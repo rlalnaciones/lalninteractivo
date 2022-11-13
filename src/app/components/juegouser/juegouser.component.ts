@@ -142,9 +142,9 @@ export class JuegouserComponent implements OnInit {
       this._partidaService.getPartidaByIdPartida(Number(this.idPartida))
         .pipe(
           tap(partida => {
-            this._jugadoresService.getDocJugadoresByJugador(partida.id, this.jugador).subscribe(
+            this._jugadoresService.getDocJugadoresByJugador(partida.id!, this.jugador).subscribe(
               (idDocumentoJugador) => {
-                let jugador = this._jugadoresService.actualizarJugador(partida.id, idDocumentoJugador, grJugador);
+                let jugador = this._jugadoresService.actualizarJugador(partida.id!, idDocumentoJugador, grJugador);
                // complete();
                 // jugador.then(result => {
                 //   console.log('result', result);

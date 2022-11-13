@@ -11,9 +11,8 @@ export class JugadoresService {
   constructor(private firestore: AngularFirestore) { }
 
   agregarJugador(idDocPartida: string,jugador: JugadorPartida): Promise<any> {
-    //console.log('agregarJugador',idDocPartida,'---', jugador);
-    const shirtsCollection = this.firestore.collection<JugadorPartida>(`/partida/${idDocPartida}/jugadores`);
-    return shirtsCollection.add(jugador);
+    const jugadores = this.firestore.collection<JugadorPartida>(`/partida/${idDocPartida}/jugadores`);
+    return jugadores.add(jugador);
      
   }
 
@@ -30,6 +29,15 @@ export class JugadoresService {
             return coleccion[0].payload.doc.id;
           }
           return "";
+        })
+      );
+  }
+
+  existeJugador(idDocPartida: string, jugador: string): Observable<boolean> {
+      return this.firestore.collection(`/partida/${idDocPartida}/jugadores`, ref => ref.where('nombre', '==', jugador)).get()
+      .pipe(
+        map(resultado => {         
+          return resultado.docs.length > 0;
         })
       );
   }

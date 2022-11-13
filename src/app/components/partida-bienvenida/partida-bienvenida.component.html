@@ -8,23 +8,32 @@
               <span class="visually-hidden">Loading...</span>
             </div>
           </h3>
-          <form class="mt 4" [formGroup]="datosPartida">
-            <div class="row">
-              <input formControlName="jugador" #txtJugador type="test" class="form-control form control-lg mt-3"
-                placeholder="Nombre del jugador">
-
+          <form [formGroup]="datosPartida">
+            <div class="mb-3">
+              <input formControlName="nombreJugador" type="test" class="form-control" 
+                [ngClass]="{'is-invalid': !nombreJugador?.valid && (nombreJugador?.dirty || nombreJugador?.touched) }" placeholder="Tu nombre">
+                  <div class="invalid-feedback" *ngIf="nombreJugador?.errors?.['required']">
+                    Ingresa tu nombre
+                  </div>
+                  <div class="invalid-feedback" *ngIf="nombreJugador?.errors?.['minlength']">
+                    <p>Tu nombre debe tener más de 5 caracteres</p>
+                  </div>
+                  <div class="invalid-feedback" *ngIf="nombreJugador?.errors?.['maxlength']">
+                    <p>Tu nombre debe tener 20 caracteres como máximo</p>
+                  </div>
             </div>
-            <div class="row">
-              <input formControlName="id_partida" #txtpartida type="number" class="form-control form control-lg mt-3"
-                placeholder="Código">
+            <div class="mb-3">
+              <input formControlName="idPartida" type="number" class="form-control" 
+                [ngClass]="{'is-invalid': !idPartida?.valid && (idPartida?.dirty || idPartida?.touched) }" placeholder="Código de la partida">
+                <div class="invalid-feedback" *ngIf="nombreJugador?.errors?.['required']">
+                  Ingresa el número de la partida
+                </div>
             </div>
-
-            <div class="mt-3">
-              <div class="alert alert-danger" role="alert" *ngIf="element == true">
-                <p>{{ mensaje }}</p>
-              </div>
-              <button type="button" class="btn btn-primary btn-lg" (click)="agregarJugador()">Empezar!!</button>
-
+            <div class="mb-3">
+              <div class="alert alert-danger" role="alert" *ngIf="element"> {{ mensaje }} </div>
+            </div>
+            <div class="mb-3">
+              <button [disabled] = "!datosPartida.valid" type="button" class="btn btn-primary btn-lg" (click)="agregarJugador()">¡Empezar!</button>
             </div>
           </form>
         </div>

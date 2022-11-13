@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { map, Observable, take, tap } from 'rxjs';
+import { Partida } from '../interfaces/partida';
 
 @Injectable({
   providedIn: 'root'
@@ -29,14 +30,13 @@ export class PartidaService {
     return this.firestore.collection('partida').doc(id).snapshotChanges();
   }
 
-  getPartidaByIdPartida(id_partida: number): Observable<any> {
-    return this.firestore.collection('partida', ref => ref.where('id_partida', '==', id_partida).limit(1)).snapshotChanges()
+  getPartidaByIdPartida(id_partida: number): Observable<Partida> {
+    return this.firestore.collection<Partida>('partida', ref => ref.where('id_partida', '==', id_partida)).get()
       .pipe(
-        take(1),
-        map(coleccion => {
-           const id = coleccion[0].payload.doc.id;
-           const data = coleccion[0].payload.doc.data();
-           return { id, data}
+        map(resultado => {         
+            const id = resultado.docs[0].id;
+            const data = resultado.docs[0].data();
+            return <Partida>{ id, ...data}
         })
       );
   }
