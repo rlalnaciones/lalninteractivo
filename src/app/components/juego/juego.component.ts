@@ -83,7 +83,7 @@ export class JuegoComponent implements OnInit {
       console.log('metodo para cambiar estado');
       if (this.indiceActual < this.preguntas.length) {
         this.preguntaActual = this.preguntas[this.indiceActual];
-        this._ItemService.actualizarItem()
+       // this._ItemService.actualizarItem()
         //console.log(this.preguntaActual );
         //console.log(this.preguntas[this.indiceActual+1]);
         this._ItemDetService.getItemdetByIdItem(this.preguntaActual.id_item).subscribe(data => {
