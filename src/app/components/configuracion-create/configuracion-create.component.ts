@@ -93,17 +93,21 @@ constructor(private fb: FormBuilder,
   
     esEditar() {
       // this.titulo = 'Editar configuracion';
+      console.log('es editar', this.id );
+      
       if(this.id !== null)  {
         this.loading = true;
         this._configuracionService.getConfiguracion(this.id).subscribe(data =>{
+          console.log('data',data);
+          
           this.loading = false;
-          console.log(data.payload.data()['id_configuracion']); //accedemos a todos los datos
+          console.log('id_configuracion',data['id_configuracion']); //accedemos a todos los datos
           this.createConfiguracion.setValue({
-            id_configuracion: data.payload.data()['id_configuracion'],
-            id_tipo_configuracion: data.payload.data()['id_tipo_configuracion'],
-            configuracion: data.payload.data()['configuracion'],
-            descripcion: data.payload.data()['descripcion'],
-            estado: data.payload.data()['estado']
+            id_configuracion: data['id_configuracion'],
+            id_tipo_configuracion: data['id_tipo_configuracion'],
+            configuracion: data['configuracion'],
+            descripcion: data['descripcion'],
+            estado: data['estado']
           })
         })
       }
