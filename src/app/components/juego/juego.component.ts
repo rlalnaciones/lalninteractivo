@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfiguracionService } from 'src/app/services/configuracion.service';
 import { Configuracion } from 'src/app/interfaces/configuracion';
 import { Item } from 'src/app/interfaces/item';
+import { Observable, takeWhile, tap, timer } from 'rxjs';
 
 @Component({
   selector: 'app-juego',
@@ -25,6 +26,7 @@ export class JuegoComponent implements OnInit {
   private indiceActual: number = -1;
   seconds!: number;
   intervalId!: number;
+  bienvenida: boolean = true;
 
   constructor(private fb: FormBuilder,
     private _ConfiguracionService: ConfiguracionService,
@@ -41,6 +43,15 @@ export class JuegoComponent implements OnInit {
 
   ngOnInit(): void {
     this.getItemByIdConfiguracion();
+    let counter = 10;
+    timer(1000, 1000) //Initial delay 1 seconds and interval countdown also 1 second
+      .pipe(
+        takeWhile( () => counter > 0 ),
+        tap(() => counter--)
+      )
+      .subscribe( () => {
+        console.log(counter);
+      } );
   }
   private resetSecs() {
     this.seconds = 3;
@@ -118,13 +129,8 @@ export class JuegoComponent implements OnInit {
 
   siguientePregunta(): void {
     this.indiceActual++;
-    //console.log('siguientePregunta--indiceActual', this.indiceActual);
-    //console.log('siguientePregunta--this.preguntas.length)', this.preguntas.length);
-
     if (this.indiceActual < this.preguntas.length) {
       this.preguntaActual = this.preguntas[this.indiceActual];
-      //console.log(this.preguntaActual );
-      //console.log(this.preguntas[this.indiceActual+1]);
       this._ItemDetService.getItemdetByIdItem(this.preguntaActual.id_item).subscribe(data => {
         this.respuestas = data;
       });

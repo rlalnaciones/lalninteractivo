@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +27,10 @@ export class ConfiguracionService {
   }
 
   getConfiguracion(id: string): Observable<any> {
-    return this.firestore.collection('configuracion').doc(id.toString()).valueChanges();
+    return this.firestore.collection('configuracion').doc(id.toString()).get()
+    .pipe(
+      map(resultado => resultado.data())
+    );
   }
   getConfiguracionByIdConfiguracion(idConfiguracion: string | null) {
     console.log(idConfiguracion);
