@@ -7,7 +7,7 @@ import { map, Observable, tap } from 'rxjs';
 })
 export class ConfiguracionService {
     //parametros para iniciar juego
-@Output() disparadorJuego: EventEmitter<any> = new EventEmitter();
+//@Output() disparadorJuego: EventEmitter<any> = new EventEmitter();
 
   constructor(private firestore: AngularFirestore) { }
 
