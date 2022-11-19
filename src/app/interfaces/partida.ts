@@ -4,4 +4,5 @@ export interface Partida {
     id_configuracion: number;
     partida: string;
     estado: number;
+    tiempoTotal: number;
 }

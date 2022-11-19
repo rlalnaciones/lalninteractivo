@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class ItemdetService {
 
   constructor(private firestore: AngularFirestore) { }
-  
+
   agregarItemdet(itemdet: any): Promise<any>{
     return this.firestore.collection('item_det').add(itemdet);
       }
@@ -16,7 +16,7 @@ export class ItemdetService {
     eliminarItemdet(id : string): Promise<any> {
     return this.firestore.collection('item_det').doc(id).delete();
     }
-    
+
     actualizarItemdet(id: string, data: any): Promise<any> {
     return this.firestore.collection('item_det').doc(id).update(data);
     }
@@ -30,12 +30,16 @@ export class ItemdetService {
     }
 
 
-    getItemdetByIdItem(id_item: number): Observable<any>{
+    getItemdetByIdItem(id_item: number): Observable<any[]>{
      // console.log(id_item);
             return this.firestore.collection('item_det',ref => ref.where('id_item',"==",id_item)).valueChanges();
 
       //retorna solo una pregunta
 //return this.firestore.collection('item',ref => ref.where('id_configuracion',"==",idConfiguracion).orderBy('id_item').startAt(0).limit(1)).valueChanges();
 
+    }
+
+    actualizarItem(id: string, data: any): Promise<any> {
+      return this.firestore.collection('item').doc(id).update(data);
     }
 }

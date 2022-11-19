@@ -56,7 +56,11 @@ export class ItemService {
     obtenerPreguntasConfiguracion(idConfiguracion: number): Observable<any> {
        return this.firestore.collection('item',ref => ref.where('id_configuracion',"==",idConfiguracion)).get()
         .pipe(
-          map(preguntas => preguntas.docs.map(doc => doc.data()))
+          map(preguntas => preguntas.docs.map(doc => {
+            let pregunta: any = doc.data();
+            pregunta.id = doc.id;
+            return pregunta;
+          }))
         );
     }
 

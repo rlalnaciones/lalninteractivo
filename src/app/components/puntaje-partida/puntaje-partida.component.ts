@@ -12,9 +12,9 @@ import { PuntajePartidaService } from './puntaje-partida.service';
 })
 export class PuntajePartidaComponent implements OnInit {
   public jugadores: JugadorPartida[] = [];
-  public partida!: Partida;
+  public partida?: Partida;
   constructor(private puntajeService: PuntajePartidaService,
-    private partidaService: PartidaService, 
+    private partidaService: PartidaService,
     private route: ActivatedRoute) { }
 
   ngOnInit(): void {
