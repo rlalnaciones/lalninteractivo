@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Item } from '../interfaces/item';
 
 @Injectable({
@@ -9,7 +9,7 @@ import { Item } from '../interfaces/item';
 export class ItemService {
 
   constructor(private firestore: AngularFirestore) { }
-  
+
   agregarItem(Item: any): Promise<any>{
     return this.firestore.collection('item').add(Item);
       }
@@ -21,11 +21,11 @@ export class ItemService {
       eliminarItem(id : string): Promise<any> {
       return this.firestore.collection('item').doc(id).delete();
       }
-    
+
       getItems(): Observable<any> {
         return this.firestore.collection('item', ref => ref.orderBy('id_item','desc')).snapshotChanges();
       }
-    
+
         getItem(id: string): Observable<any>{
       return this.firestore.collection('item').doc(id).valueChanges();
     }
@@ -52,5 +52,16 @@ export class ItemService {
         return this.firestore.collection('item',ref => ref.where('id_configuracion',"==",idConfiguracion).where('estado',"==",estado) ).valueChanges();
       }
     }
-    
+
+    obtenerPreguntasConfiguracion(idConfiguracion: number): Observable<any> {
+       return this.firestore.collection('item',ref => ref.where('id_configuracion',"==",idConfiguracion)).get()
+        .pipe(
+          map(preguntas => preguntas.docs.map(doc => {
+            let pregunta: any = doc.data();
+            pregunta.id = doc.id;
+            return pregunta;
+          }))
+        );
+    }
+
 }

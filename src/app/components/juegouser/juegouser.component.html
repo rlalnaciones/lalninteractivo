@@ -9,13 +9,10 @@
     </div>
     <div class="card" *ngIf="respuestas.length > 0">
         <div class="card-body">
-            <!-- <tr *ngFor="let respuesta of respuestas">
-                <button type="button" class="btn btn-primary" (click)="siguientePregunta()">{{ respuesta.item_det }}</button>                            
-            </tr>  -->
             <div *ngFor="let respuesta of respuestas; let i = index" [attr.data-index]="i" (click)="grabarRespuesta(respuesta)"
                 class="Basic mixed styles example col-12">
-                <div class="btn col-12" 
-                    [ngClass]="{'btn-primary': i==0 || i==5, 'btn-warning': i==1||i==9, 'btn-success': i==2||i==7, 
+                <div class="btn col-12"
+                    [ngClass]="{'btn-primary': i==0 || i==5, 'btn-warning': i==1||i==9, 'btn-success': i==2||i==7,
                     'btn-danger': i==3||i==8, 'btn-secondary': i==4||i==6}">
                     <span style="font-size:40px;font-weight:bold; text-align: left;">{{i+1}}. </span>
                     <label style="font-size:40px;font-weight:bold;">{{ respuesta.item_det }}</label>

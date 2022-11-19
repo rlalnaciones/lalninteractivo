@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ItemService } from 'src/app/services/item.service';
 import { ItemdetService } from 'src/app/services/itemdet.service';
@@ -6,26 +6,26 @@ import { ConfiguracionListComponent } from '../configuracion-list/configuracion-
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfiguracionService } from 'src/app/services/configuracion.service';
-import { Configuracion } from 'src/app/interfaces/configuracion';
-import { Item } from 'src/app/interfaces/item';
+import { takeWhile, tap, timer, Subscription } from 'rxjs';
+import { Partida } from '../../interfaces/partida';
 
 @Component({
   selector: 'app-juego',
   templateUrl: './juego.component.html',
   styleUrls: ['./juego.component.css']
 })
-export class JuegoComponent implements OnInit {
-  juegos: any[] = [];
-  Configuracion: any | Configuracion;
+export class JuegoComponent implements OnInit, OnDestroy {
   preguntas: any[] = [];
   preguntaActual: any;
   respuestas: any[] = [];
   loading = false;
-  id: string | null;
-  private indiceActual: number = -1;
-  seconds!: number;
-  intervalId!: number;
-
+  public indiceActual: number = -1;
+  bienvenida: boolean = true;
+  public tiempoRestante!: number;
+  public mostrarRespuesta: boolean = false;
+  public respuestaCorrecta: any;
+  public partida: Partida;
+  public suscripciones: Subscription;
   constructor(private fb: FormBuilder,
     private _ConfiguracionService: ConfiguracionService,
     private _ItemService: ItemService,
@@ -33,141 +33,74 @@ export class JuegoComponent implements OnInit {
     private toastr: ToastrService,
     private aRoute: ActivatedRoute,
     private router: Router) {
-
-    this.resetSecs();
-    this.id = this.aRoute.snapshot.paramMap.get("id");
+    this.suscripciones = new Subscription();
+    this.partida = <Partida>this.router.getCurrentNavigation()!.extras.state;
+    if (!this.partida) {
+      this.router.navigate(['/configuracion-list'])
+    }
   }
-
 
   ngOnInit(): void {
     this.getItemByIdConfiguracion();
   }
-  private resetSecs() {
-    this.seconds = 3;
-  }
-  private conteoRegresivo(): void {
 
-    if (--this.seconds >= 0) {
-     // console.log('quedan ', this.seconds + 1);
-      clearInterval(this.intervalId);
-    }
-  }
-
-  contador() {
-    this.resetSecs();
-    setInterval(() => this.conteoRegresivo(), 1000);
-    let i = 0;
-
-    for (i = 0; i < this.preguntas.length; i++) {
-      this.doSetTimeout(i + 1, 'test');
-      this.cambiarEstadoTimeOut(i + 1);
-    }
-  }
-
-  doSetTimeout(ciclo: number, valor: string) {
-
-    const name = () => {
-      this.siguientePregunta()
-     // console.log('ciclo siguientePregunta', ciclo);
-      this.resetSecs();
-      setInterval(() => this.conteoRegresivo(), (ciclo + 1) * 1000);
-    };
-    setTimeout(function () {
-      name()
-    }, (ciclo * this.seconds) * 1000); //1000 = time in milliseconds
-  }
-
-  cambiarEstadoTimeOut(ciclo: number) {
-
-    const name = () => {
-     // console.log('metodo para cambiar estado');
-      if (this.indiceActual < this.preguntas.length) {
-        this.preguntaActual = this.preguntas[this.indiceActual];
-       // this._ItemService.actualizarItem()
-        //console.log(this.preguntaActual );
-        //console.log(this.preguntas[this.indiceActual+1]);
-        this._ItemDetService.getItemdetByIdItem(this.preguntaActual.id_item).subscribe(data => {
-          this.respuestas = data;
-        });
-      }
-      //this.siguientePregunta()
-     // console.log('ciclo', ciclo);
-      //this.resetSecs();
-      //setInterval(() => this.conteoRegresivo(), (ciclo + 1) * 1000);
-    };
-    setTimeout(function () {
-      name()
-    }, (ciclo * this.seconds) * 1000); //1000 = time in milliseconds
+  ngOnDestroy(): void {
+    this.suscripciones.unsubscribe();
   }
 
   getItemByIdConfiguracion() {
-    if (this.id != null) {
-      this._ConfiguracionService.getConfiguracion(this.id).subscribe(
-        (Configuracion) => {
-          this.Configuracion = Configuracion;
-          this._ItemService.getItemByIdConfiguracion(Configuracion.id_configuracion, 0).subscribe(
-            (item: any) => {
-              this.preguntas = item;
-              this.siguientePregunta();
-            }
-          )
-        }
-      )
-    }
+    if (this.partida != null) {
+      this.suscripciones.add(
+        this._ItemService.obtenerPreguntasConfiguracion(Number(this.partida.id_configuracion)).subscribe(
+          (item: any) => {
+            this.preguntas = item;
+            this.siguientePregunta();
+          }));
+      } else {
+        this.router.navigate(['/configuracion-list'])
+      }
   }
 
-  siguientePregunta(): void {
-    this.indiceActual++;
-    //console.log('siguientePregunta--indiceActual', this.indiceActual);
-    //console.log('siguientePregunta--this.preguntas.length)', this.preguntas.length);
+  public iniciarCuentaRegresiva(): void {
+    this.mostrarRespuesta = false;
+    let tiempoTotal: number = this.partida.tiempoTotal;
+    this.tiempoRestante = tiempoTotal;
+    this.suscripciones.add(
+      timer(1000, 1000)
+      .pipe(
+        takeWhile( () => this.tiempoRestante > 0 ),
+        tap(() => {
+          --this.tiempoRestante;
+          if (this.tiempoRestante === 0) {
+              this.mostrarRespuesta = true;
+              this.preguntaActual.estado = 0;
+              this._ItemDetService.actualizarItem(this.preguntaActual.id, this.preguntaActual);
+          }
+        })
+      )
+      .subscribe()
+    );
+  }
 
+  public siguientePregunta(): void {
+    this.mostrarRespuesta = false;
+    this.respuestas = [];
+    this.indiceActual++;
     if (this.indiceActual < this.preguntas.length) {
       this.preguntaActual = this.preguntas[this.indiceActual];
-      //console.log('preguntaActual' ,this.preguntaActual );
-      //console.log(this.preguntas[this.indiceActual+1]);
-      //console.log('id_item consulta: ',Number(this.preguntaActual.id_item));
-      
-      this._ItemDetService.getItemdetByIdItem(this.preguntaActual.id_item).subscribe(data => {
-       // console.log(data);
-        
-        this.respuestas = data;
-      });
-    }
-
-  }
-
-  getConfiguracion() {
-    if (this.id !== null) {
-      this.loading = true;
-      this._ConfiguracionService.getConfiguracion(this.id).subscribe(data => {
-        this.loading = false;
-        this.juegos.push({
-          id_Configuracion: data.payload.doc.data()['id_Configuracion']
-        })
-      })
+      this.suscripciones.add(
+        this._ItemDetService.getItemdetByIdItem(this.preguntaActual.id_item).subscribe(data => {
+          this.respuestas = data;
+          this.preguntaActual.estado = 1;
+          this._ItemDetService.actualizarItem(this.preguntaActual.id, this.preguntaActual)
+            .then(() => {
+              this.iniciarCuentaRegresiva();
+            })
+        }));
     }
   }
 
-  getItemdetByIdItem() {
-    if (this.id != null) {
-      this._ConfiguracionService.getConfiguracion(this.id).subscribe(
-        (Configuracion) => {
-          this._ItemService.getItemByIdConfiguracion(Configuracion.id_configuracion, 0).subscribe(
-            (item) => {
-              item.forEach((element: any) => {
-                this._ItemDetService.getItemdetByIdItem(element.payload.doc.id_item).subscribe(
-                  (itemdet) => {
-                    //console.log('getItemdetByIdItem--itemdet', itemdet);
-                    this.respuestas = itemdet;
-                  }
-                )
-              }
-              )
-            }
-          )
-        }
-      )
-    }
+  public mostrarTableroPuntajes(): void {
+    this.router.navigate(['/tablero-partida', this.partida.id_partida])
   }
-
 }

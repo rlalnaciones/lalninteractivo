@@ -15,8 +15,8 @@ import { PartidaListComponent } from './components/partida-list/partida-list.com
 import { PuntajePartidaComponent } from './components/puntaje-partida/puntaje-partida.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'configuracion-list', pathMatch: 'full' },
-  { path: 'juego/:id', component:JuegoComponent},
+  { path: '', redirectTo: 'partida-bienvenida', pathMatch: 'full' },
+  { path: 'juego', component:JuegoComponent},
   { path: 'juegouser', component:JuegouserComponent},
   { path: 'configuracion-list', component:ConfiguracionListComponent},
   { path: 'configuracionEdit/:id',component:ConfiguracionCreateComponent},
@@ -34,6 +34,7 @@ const routes: Routes = [
   { path: 'partida-bienvenida',  component:PartidaBienvenidaComponent },
   { path: 'juegoPreview/:id', component:JuegopreviewComponent },
   { path: '**', redirectTo: 'configuracion-list', pathMatch: 'full' }
+  { path: '**', redirectTo: 'partida-bienvenida', pathMatch: 'full' }
 
 ];
 
