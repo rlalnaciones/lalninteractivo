@@ -13,7 +13,7 @@ import { PuntajePartidaComponent } from './components/puntaje-partida/puntaje-pa
 
 const routes: Routes = [
   { path: '', redirectTo: 'configuracion-list', pathMatch: 'full' },
-  { path: 'juego/:id', component:JuegoComponent},
+  { path: 'juego', component:JuegoComponent},
   { path: 'juegouser', component:JuegouserComponent},
   { path: 'configuracion-list', component:ConfiguracionListComponent},
   { path: 'configuracionEdit/:id',component:ConfiguracionCreateComponent},

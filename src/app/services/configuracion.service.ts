@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { map, Observable, tap } from 'rxjs';
+import { Partida } from '../interfaces/partida';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +38,17 @@ export class ConfiguracionService {
     // return this.firestore.collection('item',ref => ref.where('id_tipo_Configuracion',"==",idConfiguracion)).valueChanges();
     return this.firestore.collection('item', ref => ref.where('id_configuracion', "==", idConfiguracion)).valueChanges();
 
+  }
+
+  obtenerPartidasConfiguracion(idConfiguracion: number) {
+    return this.firestore.collection<Partida>('partida', ref => ref.where('id_configuracion', "==", String(idConfiguracion))).get()
+      .pipe(
+        map(coleccionPartidas => coleccionPartidas.docs.map(metadataPartida => {
+          let partida: Partida = metadataPartida.data();
+          partida.id = metadataPartida.id;
+          return partida;
+        }))
+      );
   }
 
 }

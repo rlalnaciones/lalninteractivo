@@ -1,7 +1,6 @@
 <div class="container mt-4">
     <div class="card">
         <div class="card-body">
-
             <span class="h3">Configuraciones</span>
             <button class="btn btn-dark btn-lg float-right" routerLink="/configuracionCreate">Agregar</button>
             <img src="./assets/logo_full.jpg" class="rounded float-end" alt="..." width="90" height="90" style="border-radius: 15px; margin-right: 10px;" />
@@ -9,7 +8,6 @@
             <table *ngIf="configuraciones.length > 0" class="table mt-5 table-striped">
                 <thead>
                   <tr>
-                    <!-- <th>id_Configuracion</th> -->
                     <th>Configuracion</th>
                     <th>Descripción</th>
                     <th>Opciones</th>
@@ -17,17 +15,48 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let Configuracion of configuraciones">
-                    <!-- <td>{{ Configuracion.id_configuracion }}</td> -->
                     <td>{{ Configuracion.configuracion }}</td>
                     <td>{{ Configuracion.descripcion }}</td>
-                    <td><i class="fas fa-puzzle-piece fa-lg mr-2" [routerLink]="['/juego',Configuracion.id]" title="Vista previa"></i>
-                      <i class="fas fa-plus-circle" [routerLink]="['/partidaCreate']" title="Crear partida"></i>
-                        <i class="fas fa-edit fa-lg text-info mr-2" [routerLink]="['/configuracionEdit',Configuracion.id]" title="Editar"></i>
+                    <td>
+                      <div class="btn-toolbar">
+                        <div class="btn-group me-2">
+                          <!-- <button type="button" class="btn" [routerLink]="['/juego',Configuracion.i]" title="Vista previa">
+                            <i class="fas fa-puzzle-piece fa-lg mr-2"></i>
+                          </button> -->
+                          <button type="button" class="btn" (click)="obtenerPartidasConfiguracion(Configuracion)" title="Ver Partidas">
+                            <i class="fas fa-list fa-lg text-primary mr-2"></i>
+                          </button>
+                          <button type="button" class="btn" [routerLink]="['/partidaCreate']" title="Crear partida">
+                            <i class="fas fa-plus-circle"></i>
+                          </button>
+                          <button type="button" class="btn" [routerLink]="['/configuracionEdit',Configuracion.id]" title="Editar">
+                            <i class="fas fa-edit fa-lg text-info mr-2"></i>
+                          </button>
+                        </div>
+                      </div>
                         <!-- <i (click)="eliminarConfiguracion(Configuracion.id)" class="fas fa-trash-alt fa-lg text-danger" title="Eliminar"></i> -->
                     </td>
-                  </tr> 
+                  </tr>
+                  <tr>
+                    <td *ngIf="listadoPartidas.length > 0" colspan="3">
+                      <table *ngIf="configuraciones.length > 0" class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th>No. Partida</th>
+                            <th>Nombre</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let partida of listadoPartidas">
+                            <td><a routerLink="" (click)="iniciarPartida(partida)" title="Empezar la partida">{{ partida.id_partida }}</a></td>
+                            <td>{{ partida.partida }}</td>
+                          </tr>
+                        </tbody>
+                    </table>
+                    </td>
+                  </tr>
                 </tbody>
-              </table>
+            </table>
         </div>
     </div>
 </div>
