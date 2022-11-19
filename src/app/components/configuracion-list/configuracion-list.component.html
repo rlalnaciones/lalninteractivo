@@ -12,7 +12,11 @@
                     <!-- <th>id_Configuracion</th> -->
                     <th>Configuracion</th>
                     <th>Descripción</th>
-                    <th>Opciones</th>
+                    <th>id_configuracion</th>
+                    <th>id_tipo_configuracion</th>
+                    <th >Opciones</th>
+                    <th ></th>
+                    <th ></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -20,9 +24,12 @@
                     <!-- <td>{{ Configuracion.id_configuracion }}</td> -->
                     <td>{{ Configuracion.configuracion }}</td>
                     <td>{{ Configuracion.descripcion }}</td>
-                    <td><i class="fas fa-puzzle-piece fa-lg mr-2" [routerLink]="['/juego',Configuracion.id]" title="Vista previa"></i>
-                      <i class="fas fa-plus-circle" [routerLink]="['/partidaCreate']" title="Crear partida"></i>
-                        <i class="fas fa-edit fa-lg text-info mr-2" [routerLink]="['/configuracionEdit',Configuracion.id]" title="Editar"></i>
+                    <td>{{ Configuracion.id_configuracion }}</td>
+                    <td>{{ Configuracion.id_tipo_configuracion }}</td>
+                    <td><i class="fas fa-puzzle-piece fa-lg mr-2" [routerLink]="['/juegoPreview',Configuracion.id]" title="Vista previa"></i></td>
+                      <td><i class="fas fa-plus-circle" [routerLink]="['/partidaCreate']" title="Crear partida"></i></td>
+                        <td><i class="fas fa-edit fa-lg text-info mr-2" [routerLink]="['/configuracionEdit',Configuracion.id]" title="Editar"></i>
+                          <!-- <td><i class="fas fa-edit fa-lg text-info mr-2" routerLink="/itemdet-list" title="Ver / Agregar preguntas">Preguntas</i> -->
                         <!-- <i (click)="eliminarConfiguracion(Configuracion.id)" class="fas fa-trash-alt fa-lg text-danger" title="Eliminar"></i> -->
                     </td>
                   </tr> 

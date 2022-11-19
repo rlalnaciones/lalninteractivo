@@ -1,0 +1,41 @@
+<div class="container mt-4" style="width: 100%;">
+    <div class="card" style="width: 100%;">
+        <div class="card-body" style="width: 100%;">
+
+            <span class="h3">Preguntas</span>
+            <button class="btn btn-dark btn-lg float-right" routerLink="/item-create">Agregar</button>
+            <img src="./assets/logo_full.jpg" class="rounded float-end" alt="..." width="90" height="90" style="border-radius: 15px; margin-right: 10px;" />
+            <h5 style="margin-top: 30px;" *ngIf="items.length == 0">No hay datos para mostrar</h5>
+            <table *ngIf="items.length > 0" class="table mt-5 table-striped">
+                <thead>
+                  <tr>
+                    <!-- <th>id_Configuracion</th> -->
+                    <th>id_item</th>
+                    <th>item</th>
+                    <th >id_configuracion</th>
+                    <th >id_tipo_respuesta</th>
+                    <th >estado</th>
+                    <th >Editar</th>
+                    <th >Eliminar</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of items">
+                    <!-- <td>{{ Configuracion.id_configuracion }}</td> -->
+                    <td>{{ item.id_item }}</td>
+                    <td>{{ item.item }}</td>
+                    <td>{{ item.id_configuracion }}</td>
+                    <td>{{ item.id_tipo_respuesta }}</td>
+                    <td>{{ item.estado }}</td>
+                    <!-- <td><i class="fas fa-puzzle-piece fa-lg mr-2" [routerLink]="['/juego',item.id]" title="Vista previa"></i></td> -->
+                      <!-- <td><i class="fas fa-plus-circle" [routerLink]="['/item-create']" title="Crear Respuesta"></i></td> -->
+                        <td><i class="fas fa-edit fa-lg text-info mr-2" [routerLink]="['/itemEdit',item.id]" title="Editar"></i></td>
+                          <!-- <td><i class="fas fa-edit fa-lg text-info mr-2" routerLink="/itemdet-list" title="Ver / Agregar preguntas">Preguntas</i> -->
+                            <td><i (click)="eliminar(item.id)" class="fas fa-trash-alt fa-lg text-danger" title="Eliminar"></i></td>
+                    
+                  </tr> 
+                </tbody>
+              </table>
+        </div>
+    </div>
+</div>

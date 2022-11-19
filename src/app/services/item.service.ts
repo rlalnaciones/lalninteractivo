@@ -11,23 +11,23 @@ export class ItemService {
   constructor(private firestore: AngularFirestore) { }
   
   agregarItem(Item: any): Promise<any>{
-    return this.firestore.collection('Item').add(Item);
+    return this.firestore.collection('item').add(Item);
       }
 
       actualizarItem(id: string, data: any): Promise<any> {
-      return this.firestore.collection('Item').doc(id).update(data);
+      return this.firestore.collection('item').doc(id).update(data);
       }
 
       eliminarItem(id : string): Promise<any> {
-      return this.firestore.collection('Item').doc(id).delete();
+      return this.firestore.collection('item').doc(id).delete();
       }
     
       getItems(): Observable<any> {
-        return this.firestore.collection('Item', ref => ref.orderBy('id_item','desc')).snapshotChanges();
+        return this.firestore.collection('item', ref => ref.orderBy('id_item','desc')).snapshotChanges();
       }
     
         getItem(id: string): Observable<any>{
-      return this.firestore.collection('Item').doc(id).snapshotChanges();
+      return this.firestore.collection('item').doc(id).valueChanges();
     }
 //     getItemByIdConfiguracion(idConfiguracion: number | null, estado:number | null){
 //       console.log(idConfiguracion);

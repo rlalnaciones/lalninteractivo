@@ -30,7 +30,6 @@ export class ConfiguracionService {
     return this.firestore.collection('configuracion').doc(id.toString()).valueChanges();
   }
   getConfiguracionByIdConfiguracion(idConfiguracion: string | null) {
-    console.log(idConfiguracion);
     // return this.firestore.collection('item',ref => ref.where('id_tipo_Configuracion',"==",idConfiguracion)).valueChanges();
     return this.firestore.collection('item', ref => ref.where('id_configuracion', "==", idConfiguracion)).valueChanges();
 

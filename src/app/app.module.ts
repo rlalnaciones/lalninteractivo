@@ -21,6 +21,9 @@ import { PartidaCreateComponent } from './components/partida-create/partida-crea
 import { PuntajePartidaComponent } from './components/puntaje-partida/puntaje-partida.component';
 import { PartidaBienvenidaComponent } from './components/partida-bienvenida/partida-bienvenida.component';
 import { JuegouserComponent } from './components/juegouser/juegouser.component';
+import { ItemListComponent } from './components/item-list/item-list.component';
+import { ItemCreateComponent } from './components/item-create/item-create.component';
+import { JuegopreviewComponent } from './components/juegopreview/juegopreview.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +38,10 @@ import { JuegouserComponent } from './components/juegouser/juegouser.component';
     PartidaCreateComponent,
     PuntajePartidaComponent,
     PartidaBienvenidaComponent,
-    JuegouserComponent
+    JuegouserComponent,
+    ItemListComponent,
+    ItemCreateComponent,
+    JuegopreviewComponent
   ],
   imports: [
     BrowserModule,

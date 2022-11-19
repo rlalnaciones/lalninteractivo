@@ -1,1 +1,34 @@
-<p>itemdet-list works!</p>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+
+            <span class="h3">Respuestas</span>
+            <button class="btn btn-dark btn-lg float-right" routerLink="/itemdetCreate">Agregar</button>
+            <img src="./assets/logo_full.jpg" class="rounded float-end" alt="..." width="90" height="90" style="border-radius: 15px; margin-right: 10px;" />
+            <h5 style="margin-top: 30px;" *ngIf="itemsdet.length == 0">No hay datos para mostrar</h5>
+            <table *ngIf="itemsdet.length > 0" class="table mt-5 table-striped">
+                <thead>
+                  <tr>
+                    <!-- <th>id_Configuracion</th> -->
+                    <th>id_item_det</th>
+                    <th>item_det (respuesta)</th>
+                    <th >id_item</th>
+                    <th >valor_esperado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let itemdet of itemsdet">
+                    <!-- <td>{{ Configuracion.id_configuracion }}</td> -->
+                    <td>{{ itemdet.id_item_det }}</td>
+                    <td>{{ itemdet.item_det }}</td>
+                    <td>{{ itemdet.id_item }}</td>
+                    <td>{{ itemdet.valor_esperado }}</td>
+                        <td><i class="fas fa-edit fa-lg text-info mr-2" [routerLink]="['/itemdetEdit',itemdet.id]" title="Editar"></i>
+                        <i (click)="eliminar(itemdet.id)" class="fas fa-trash-alt fa-lg text-danger" title="Eliminar"></i>
+                    </td>
+                  </tr> 
+                </tbody>
+              </table>
+        </div>
+    </div>
+</div>
