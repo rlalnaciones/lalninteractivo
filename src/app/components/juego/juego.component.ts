@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfiguracionService } from 'src/app/services/configuracion.service';
 import { takeWhile, tap, timer, Subscription } from 'rxjs';
 import { Partida } from '../../interfaces/partida';
+import { PartidaService } from '../../services/partida.service';
 
 @Component({
   selector: 'app-juego',
@@ -27,11 +28,9 @@ export class JuegoComponent implements OnInit, OnDestroy {
   public partida: Partida;
   public suscripciones: Subscription;
   constructor(private fb: FormBuilder,
-    private _ConfiguracionService: ConfiguracionService,
+    private _partidaService: PartidaService,
     private _ItemService: ItemService,
     private _ItemDetService: ItemdetService,
-    private toastr: ToastrService,
-    private aRoute: ActivatedRoute,
     private router: Router) {
     this.suscripciones = new Subscription();
     this.partida = <Partida>this.router.getCurrentNavigation()!.extras.state;
@@ -59,6 +58,16 @@ export class JuegoComponent implements OnInit, OnDestroy {
       } else {
         this.router.navigate(['/configuracion-list'])
       }
+  }
+
+  public iniciarPartida(): void {
+    this.partida.estado = 2; //Pasa a estar en juego
+    this._partidaService.actualizarPartida(this.partida.id!, this.partida)
+      .then(() => {
+        this.bienvenida = !this.bienvenida;
+      });
+
+
   }
 
   public iniciarCuentaRegresiva(): void {
@@ -101,6 +110,10 @@ export class JuegoComponent implements OnInit, OnDestroy {
   }
 
   public mostrarTableroPuntajes(): void {
-    this.router.navigate(['/tablero-partida', this.partida.id_partida])
+    this.partida.estado = 3; //Partida Finalizada
+    this._partidaService.actualizarPartida(this.partida.id!, this.partida)
+      .then(() => {
+        this.router.navigate(['/tablero-partida', this.partida.id_partida])
+      });
   }
 }

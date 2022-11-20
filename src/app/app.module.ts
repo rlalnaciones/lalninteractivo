@@ -15,7 +15,7 @@ import { environment } from '../environments/environment';
 import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireModule } from '@angular/fire/compat';
-import { ToastrModule } from 'ngx-toastr';
+import { ToastNoAnimationModule, ToastrModule } from 'ngx-toastr';
 import { PartidaListComponent } from './components/partida-list/partida-list.component';
 import { PartidaCreateComponent } from './components/partida-create/partida-create.component';
 import { PuntajePartidaComponent } from './components/puntaje-partida/puntaje-partida.component';
@@ -51,8 +51,9 @@ import { JuegopreviewComponent } from './components/juegopreview/juegopreview.co
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     AngularFirestoreModule,
-    ToastrModule.forRoot()
-  
+    ToastrModule.forRoot(),
+    ToastNoAnimationModule.forRoot()
+
   ],
   providers: [],
   bootstrap: [AppComponent]

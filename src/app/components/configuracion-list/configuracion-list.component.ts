@@ -26,18 +26,23 @@ export class ConfiguracionListComponent implements OnInit {
       data.forEach((element:any )=> {
         this.configuraciones.push({
           id : element.payload.doc.id,
-          ...element.payload.doc.data()
+          ...element.payload.doc.data(),
+          mostrarPartidas: false
         })
       });
     })
   }
 
   obtenerPartidasConfiguracion(configuracion: any): void {
-    this._configuracionService.obtenerPartidasConfiguracion(configuracion.id_configuracion).subscribe(data => this.listadoPartidas = data);
+    configuracion.mostrarPartidas = !configuracion.mostrarPartidas
+    this._configuracionService.obtenerPartidasConfiguracion(configuracion.id_configuracion).subscribe(data => configuracion.listadoPartidas = data);
   }
 
   public iniciarPartida(partida: Partida): void {
-    const id = partida.id_configuracion;
+    if (partida.estado === 2 || partida.estado === 3) {
+      this.toastr.error('No puede iniciar una partida que se encuentre en juego o finalizada!!!');
+      return;
+    }
     this.router.navigate(['/juego'], {state: partida })
   }
 

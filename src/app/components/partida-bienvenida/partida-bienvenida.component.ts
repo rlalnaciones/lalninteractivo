@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { concatMap, Observable, of, Subscription, tap } from 'rxjs';
+import { catchError, concatMap, EMPTY, Observable, of, Subscription, tap, throwError } from 'rxjs';
 import { JugadorPartida } from 'src/app/interfaces/jugador-partida';
 import { Partida } from 'src/app/interfaces/partida';
 import { ConfiguracionService } from 'src/app/services/configuracion.service';
@@ -42,7 +42,7 @@ export class PartidaBienvenidaComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.suscripciones.unsubscribe();
   }
- 
+
   agregarJugador() {
     this.loading = true;
     this.suscripciones.add(
@@ -50,19 +50,24 @@ export class PartidaBienvenidaComponent implements OnInit, OnDestroy {
       .pipe(
         concatMap(dataPartida => {
           this.partida = dataPartida;
+          if (this.partida.estado == 2 || this.partida.estado == 3) {
+
+            return throwError(() => new Error('Oops! lo sentimos, la partida ya no esta disponible para jugar, pide a tu maestro te de un numero válido de partida.'))
+          }
           return this._jugadoresService.existeJugador(this.partida.id!, this.nombreJugador?.value);
         }),
         tap(result => {
+
           if (!result) {
             const grJugador: JugadorPartida = {
               nombre: this.nombreJugador?.value,
               puntaje: 0
             };
-  
+
             sessionStorage.setItem("id_partida", String(this.partida?.id_partida));
             sessionStorage.setItem("jugador", this.nombreJugador?.value);
             sessionStorage.setItem("idConfiguracion", String(this.partida?.id_configuracion));
-  
+
             this._jugadoresService.agregarJugador(this.partida?.id!, grJugador)
               .then(() => {
                 this.router.navigate(['/juegouser'])
@@ -76,6 +81,16 @@ export class PartidaBienvenidaComponent implements OnInit, OnDestroy {
             this.element = true;
             this.loading = false;
           }
+        }),
+        catchError(error => {
+          if (error.error) {
+            this.mensaje = error.error;
+          } else {
+            this.mensaje = error;
+          }
+          this.element = true;
+          this.loading = false;
+          return EMPTY;
         })
       )
       .subscribe()
@@ -111,7 +126,7 @@ export class PartidaBienvenidaComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
-  
+
   public get idPartida() {
     return this.datosPartida.get('idPartida');
   }

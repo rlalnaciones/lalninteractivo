@@ -40,7 +40,7 @@ export class ConfiguracionService {
   }
 
   obtenerPartidasConfiguracion(idConfiguracion: number) {
-    return this.firestore.collection<Partida>('partida', ref => ref.where('id_configuracion', "==", String(idConfiguracion))).get()
+    return this.firestore.collection<Partida>('partida', ref => ref.where('id_configuracion', "==", idConfiguracion)).get()
       .pipe(
         map(coleccionPartidas => coleccionPartidas.docs.map(metadataPartida => {
           let partida: Partida = metadataPartida.data();
