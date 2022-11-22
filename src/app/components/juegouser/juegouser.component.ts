@@ -1,8 +1,10 @@
+import { UpperCasePipe } from '@angular/common';
+import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { tap } from 'rxjs';
+import { concatMap, Subscription, takeWhile, tap, timer } from 'rxjs';
 import { Item } from 'src/app/interfaces/item';
 import { JugadorPartida } from 'src/app/interfaces/jugador-partida';
 import { Partida } from 'src/app/interfaces/partida';
@@ -19,28 +21,32 @@ import { Configuracion } from '../configuracion';
   styleUrls: ['./juegouser.component.css']
 })
 export class JuegouserComponent implements OnInit {
-  //createConfiguracion: FormGroup;
   juegos: any[] = [];
   data: any[] = [];
-  //Configuracion: any[] = [];
-  //item: any[] = [];
   items: Item[] = [];
   partidas: Partida[] = [];
   Configuracions: Configuracion[] = [];
   Configuracion: any | Configuracion;
   idConfiguracion: number = 0;
-  //preguntas: any[] = [];
   preguntas: any[] = [];
   preguntaActual: any;
   respuestas: any[] = [];
-  //createJuego: FormGroup;
   submitted = false;
   loading = false;
   id: string = '';
   idPartida = 0;
   jugador: string = '';
-  private indiceActual: number = -1;
+  tiempoTotal = 0;
   titulo = '';
+  punteoAcumulado = 0;
+  mensaje: string = '';
+  mensajeEstado2: string = '';
+  estadoPartida = 0;
+  public tiempoRestante!: number;
+  public mostrarRespuesta: boolean = false;
+  public respuestaCorrecta: any;
+  public partida!: Partida;
+  public suscripciones: Subscription;
 
   constructor(private fb: FormBuilder,
     private _ConfiguracionService: ConfiguracionService,
@@ -51,116 +57,134 @@ export class JuegouserComponent implements OnInit {
     private toastr: ToastrService,
     private aRoute: ActivatedRoute,
     private router: Router) {
-    //this.idConfiguracion =this.router.getCurrentNavigation().extras.state.id;
-    //this.idPartida = Number(this.aRoute.snapshot.paramMap.get("idPartida"));
-    console.log(this.idPartida)
-
+    this.suscripciones = new Subscription();
   }
 
   ngOnInit(): void {
-    this.get_PartidaByIdPartida();
-  }
-
-  get_PartidaByIdPartida() {
-    //this.idPartida = 220107179;
-    //this.jugador = 'Eunice'
-    // this.jugador = String(sessionStorage.getItem("jugador"));
-    // this.Configuracion=sessionStorage.getItem("idConfiguracion");
-    // this._PartidaService.getPartidaByIdPartida(this.idPartida).subscribe(
-    //   (partida: any) => {
     this.idConfiguracion = Number(sessionStorage.getItem("idConfiguracion"));
     this.jugador = String(sessionStorage.getItem("jugador"));
     this.idPartida = Number(sessionStorage.getItem("id_partida"));
-    console.log('idConfiguracion ;', this.idConfiguracion, ' ,jugador:', this.jugador, ', id_poartida', this.idPartida);
-
-    this.getItemByIdConfiguracion();
-
-    //   }
-    // )
+    this.loading = true;
+    this.mensaje = `¡¡Bienvenid@!!  ${this.jugador.toUpperCase()} por favor espera un momento mientras otros amiguitos se unen para empezar!!`;
+    this.getPartida()
   }
 
-  getItemByIdConfiguracion() {
-    if (this.idConfiguracion != null) {
-      this._ItemService.getItemByIdConfiguracion(this.idConfiguracion, 1).subscribe(
-        (item: any) => {
-          this.preguntas = item;
-          this.preguntaActual = this.preguntas[0];
-          this.respuestas = [];
-          if (this.preguntas.length > 0) {
-            this._ItemDetService.getItemdetByIdItem(this.preguntaActual.id_item).subscribe(data => {
-              this.respuestas = data;
-            });
-          }
-        }
-      )
-    }
+  ngOnDestroy(): void {
+    this.suscripciones.unsubscribe();
   }
 
-  getConfiguracion() {
-    if (this.id !== null) {
-      this.loading = true;
-      this._ConfiguracionService.getConfiguracion(this.id).subscribe(data => {
-        this.loading = false;
-        // console.log(data.payload.data()['id_Configuracion']); //accedemos a todos los datos
-        this.juegos.push({
-          id_Configuracion: data.payload.doc.data()['id_Configuracion']
+  getPartida() {
+    this.suscripciones.add(
+      this._partidaService.getPartidas(Number(this.idPartida)).subscribe(
+        data => {
+          this.partidas = [];
+          data.forEach((element: any) => {
+            this.partidas.push({
+              id: element.payload.doc.id,
+              ...element.payload.doc.data()
+            })
+          });
+          console.log(this.partidas[0].estado);
+          this.estadoPartida = this.partidas[0].estado;
+          this.getItemByIdConfiguracion();
         })
-      })
-    }
+    )
   }
 
-  getItemdetByIdItem() {
-    if (this.id != null) {
-      this._ConfiguracionService.getConfiguracion(this.id).subscribe(
-        (Configuracion) => {
-          this._ItemService.getItemByIdConfiguracion(Configuracion.id_configuracion, 1).subscribe(
-            (item) => {
-              item.forEach((element: any) => {
-                this._ItemDetService.getItemdetByIdItem(element.payload.doc.id_item).subscribe(
-                  (itemdet) => {
-                    console.log(itemdet);
-                    this.respuestas = itemdet;
-                  }
-                )
-              }
-              )
-            }
+  get_PartidaByIdPartida() {
+    this.loading = true;
+    this.suscripciones.add(
+      this._partidaService.getPartidaByIdPartida(Number(this.idPartida))
+        .pipe(
+          tap(partida => {
+            this.tiempoTotal = partida.tiempoTotal
+            this.estadoPartida = partida.estado
+            console.log('this.estadoPartida ', this.estadoPartida);
+          }
           )
-        }
-      )
+        )
+        .subscribe()
+    );
+
+  }
+  getItemByIdConfiguracion() {
+    //PREGUNTAS 
+    // console.log('preguntas - estado', this.estadoPartida);
+
+    if (this.idConfiguracion != null && this.estadoPartida == 2) {
+      this.suscripciones.add(this._ItemService.getItemByIdConfiguracion(this.idConfiguracion, 1)
+        .pipe(
+          concatMap(item => {
+            //console.log('obtiene preguntas');
+            this.loading = true;
+            this.preguntas = item;
+            this.preguntaActual = this.preguntas[0];
+            this.respuestas = [];
+            if (this.preguntas.length > 0) {
+              this._ItemDetService.getItemdetByIdItem(this.preguntaActual.id_item).subscribe(data => {
+                this.respuestas = data;
+                this.loading = false;
+                this.iniciarCuentaRegresiva();
+              });
+            }
+            return item;
+          })
+        )
+        .subscribe(
+      ))
     }
   }
 
   grabarRespuesta(respuesta: any) {
     if (respuesta.valor_esperado == 1) {
-      let punteo: number = 1000 * respuesta.id_item_det;
+      let punteo: number = 100 + (this.tiempoRestante * 100)
+      this.punteoAcumulado += punteo;
+      //      console.log('punteo',punteo);
       const grJugador: JugadorPartida = {
         nombre: this.jugador,
-        puntaje: punteo
+        puntaje: this.punteoAcumulado
       };
+      //console.log('punteo acumulado', this.punteoAcumulado);
 
       this._partidaService.getPartidaByIdPartida(Number(this.idPartida))
         .pipe(
           tap(partida => {
-            this._jugadoresService.getDocJugadoresByJugador(partida.id!, this.jugador).subscribe(
+            this.estadoPartida = partida.estado;
+            this.suscripciones.add(this._jugadoresService.getDocJugadoresByJugador(partida.id!, this.jugador).subscribe(
               (idDocumentoJugador) => {
                 let jugador = this._jugadoresService.actualizarJugador(partida.id!, idDocumentoJugador, grJugador);
-               // complete();
-                // jugador.then(result => {
-                //   console.log('result', result);
-
-                //   // this.router.navigate(['/juegouser'])
-                // }).catch(error => {
-                //   console.error(error);
-                //   this.loading = false;
-
-                // });
-              })
-              
+              }))
           })
         )
         .subscribe();
-        
     }
+    this.tiempoRestante = 0;
+    this.loading = true;
+    this.mensaje = 'Muy bien! espera la siguiente pregunta';
+    this.get_PartidaByIdPartida();
+  }
+
+  public iniciarCuentaRegresiva(): void {
+    this.mensaje = 'ooops espera la siguiente pregunta';
+    this.loading = false;
+    this.mostrarRespuesta = false;
+    this.tiempoRestante = this.tiempoTotal;
+    this.suscripciones.add(
+      timer(1000, 1000)
+        .pipe(
+          takeWhile(() => this.tiempoRestante > 0),
+          tap(() => {
+            --this.tiempoRestante;
+            this.loading = false;
+
+            if (this.tiempoRestante === 0) {
+              this.loading = true;
+              this.get_PartidaByIdPartida();
+            }
+          })
+        )
+        .subscribe()
+    );
+
   }
 }

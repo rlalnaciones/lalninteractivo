@@ -33,7 +33,7 @@ export class ConfiguracionService {
       map(resultado => resultado.data())
     );
   }
-  getConfiguracionByIdConfiguracion(idConfiguracion: string | null) {
+  getConfiguracionByIdConfiguracion(idConfiguracion: number | null) {
     // return this.firestore.collection('item',ref => ref.where('id_tipo_Configuracion',"==",idConfiguracion)).valueChanges();
     return this.firestore.collection('item', ref => ref.where('id_configuracion', "==", idConfiguracion)).valueChanges();
 

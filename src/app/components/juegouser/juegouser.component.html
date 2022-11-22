@@ -1,22 +1,41 @@
 <div class="container mt-4">
-    <div class="card">
+    <div *ngIf="this.estadoPartida == 1" class="card-body mt-5">
+        <button class="btn btn-danger" style="width: 100%; height: 100% ;" type="button" disabled>
+            {{ this.mensaje }} 
+        </button>
+    </div>
+    <div *ngIf="this.estadoPartida == 2 && loading " class="card-body mt-5">
+        <button class="btn btn-danger" style="width: 100%; height: 100% ;" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            {{ this.mensaje }} 
+        </button>
+    </div>
+    <div *ngIf="this.estadoPartida == 3 && loading" class="card-body mt-5">
+        <h3 *ngIf="this.punteoAcumulado>0 " >¡¡¡Felicidades!!! Puntaje Obtenido: {{ this.punteoAcumulado }}</h3>
+        <h3 *ngIf="this.punteoAcumulado===0 ">Gracias por participar,  Puntaje Obtenido: {{ this.punteoAcumulado }}  Repasa la lección y vuelve a intentarlo! </h3>
+    </div>
+    <div *ngIf="!loading" class="card">
         <div class="card-body">
+
             <h3 style="text-align:center ;">{{ Configuracion?.configuracion }}</h3>
             <div *ngIf="preguntas.length > 0">
                 <h3 style="text-align:center ;">{{ preguntaActual.item }}</h3>
+                <h2 class="text-center text-success" *ngIf="tiempoRestante > 0"> Tiempo para responder: {{
+                    tiempoRestante }}</h2>
             </div>
         </div>
-    </div>
-    <div class="card" *ngIf="respuestas.length > 0">
-        <div class="card-body">
-            <div *ngFor="let respuesta of respuestas; let i = index" [attr.data-index]="i" (click)="grabarRespuesta(respuesta)"
-                class="Basic mixed styles example col-12">
-                <div class="btn col-12"
-                    [ngClass]="{'btn-primary': i==0 || i==5, 'btn-warning': i==1||i==9, 'btn-success': i==2||i==7,
-                    'btn-danger': i==3||i==8, 'btn-secondary': i==4||i==6}">
-                    <span style="font-size:40px;font-weight:bold; text-align: left;">{{i+1}}. </span>
-                    <label style="font-size:40px;font-weight:bold;">{{ respuesta.item_det }}</label>
+        <div class="card" *ngIf="respuestas.length > 0 ">
+            <div class="card-body">
+                <div *ngFor="let respuesta of respuestas; let i = index" [attr.data-index]="i"
+                    (click)="grabarRespuesta(respuesta)" class="Basic mixed styles example col-12">
+                    <div class="btn col-12" [ngClass]="{'btn-danger': i==0 || i==5, 'btn-warning': i==1||i==9, 'btn-primary': i==2||i==7,
+                        'btn-success': i==3||i==8, 'btn-dark': i==4||i==6}">
+                        <span style="font-size:40px;font-weight:bold; text-align: left;">{{i+1}}. </span>
+                        <label style="font-size:40px;font-weight:bold;">{{ respuesta.item_det }}</label>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+</div>

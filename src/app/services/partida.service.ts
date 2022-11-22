@@ -22,8 +22,13 @@ export class PartidaService {
     return this.firestore.collection('partida').doc(id).delete();
   }
 
-  getPartidas(): Observable<any> {
-    return this.firestore.collection('partida', ref => ref.orderBy('id_partida', 'desc')).snapshotChanges();
+  getPartidas(id_partida?: number | null): Observable<any> {
+    if (id_partida == 0) {
+      return this.firestore.collection('partida', ref => ref.orderBy('id_partida', 'desc')).snapshotChanges();
+    }
+    else {
+      return this.firestore.collection('partida', ref => ref.where('id_partida', "==", id_partida)).snapshotChanges();
+    }
   }
 
   getPartida(id: string): Observable<any> {
@@ -33,10 +38,10 @@ export class PartidaService {
   getPartidaByIdPartida(id_partida: number): Observable<Partida> {
     return this.firestore.collection<Partida>('partida', ref => ref.where('id_partida', '==', id_partida)).get()
       .pipe(
-        map(resultado => {         
-            const id = resultado.docs[0].id;
-            const data = resultado.docs[0].data();
-            return <Partida>{ id, ...data}
+        map(resultado => {
+          const id = resultado.docs[0].id;
+          const data = resultado.docs[0].data();
+          return <Partida>{ id, ...data }
         })
       );
   }
