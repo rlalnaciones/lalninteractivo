@@ -24,6 +24,7 @@ import { JuegouserComponent } from './components/juegouser/juegouser.component';
 import { ItemListComponent } from './components/item-list/item-list.component';
 import { ItemCreateComponent } from './components/item-create/item-create.component';
 import { JuegopreviewComponent } from './components/juegopreview/juegopreview.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -51,8 +52,8 @@ import { JuegopreviewComponent } from './components/juegopreview/juegopreview.co
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     AngularFirestoreModule,
+    BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot(),
-    ToastNoAnimationModule.forRoot()
 
   ],
   providers: [],

@@ -22,7 +22,7 @@
                         <div class="btn-toolbar">
                           <div class="btn-group me-2">
                             <button type="button" class="btn" (click)="obtenerPartidasConfiguracion(Configuracion)" title="Ver Partidas">
-                              <i class="fas fa-list fa-lg text-primary mr-2"></i>
+                              <i class="fas fa-bars fa-lg text-primary mr-2"></i>
                             </button>
                             <button type="button" class="btn" [routerLink]="['/partidaCreate']" title="Crear partida">
                               <i class="fas fa-plus-circle"></i>
@@ -42,6 +42,7 @@
                               <th>No. Partida</th>
                               <th>Nombre</th>
                               <th>Estado</th>
+                              <th>Opciones</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -51,6 +52,14 @@
                               </td>
                               <td>{{ partida.partida }}</td>
                               <td> {{ partida.estado === 1 ? 'Disponible' : partida.estado === 2 ? 'En Juego': 'Finalizada'}} </td>
+                              <td>
+                                <div class="btn-toolbar">
+                                  <div class="btn-group me-2">
+                                    <a class="btn" [ngClass]="{'disabled': partida.estado === 1}" [routerLink]="['/tablero-partida', partida.id_partida]" role="button" title="Ver tablero de puntación">
+                                      <i class="fas fa-list fa-lg  mr-2" [ngClass]="{'text-primary': partida.estado !== 1, 'text-secondary': partida.estado === 1}"></i></a>
+                                  </div>
+                                </div>
+                              </td>
                             </tr>
                           </tbody>
                         </table>
