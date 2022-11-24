@@ -13,7 +13,7 @@ export class JugadoresService {
   agregarJugador(idDocPartida: string,jugador: JugadorPartida): Promise<any> {
     const jugadores = this.firestore.collection<JugadorPartida>(`/partida/${idDocPartida}/jugadores`);
     return jugadores.add(jugador);
-     
+
   }
 
   actualizarJugador(idDocPartida: string,idDocJugador: string, data: any): Promise<any> {
@@ -36,10 +36,15 @@ export class JugadoresService {
   existeJugador(idDocPartida: string, jugador: string): Observable<boolean> {
       return this.firestore.collection(`/partida/${idDocPartida}/jugadores`, ref => ref.where('nombre', '==', jugador)).get()
       .pipe(
-        map(resultado => {         
+        map(resultado => {
           return resultado.docs.length > 0;
         })
       );
+  }
+
+  public obtenerJugadoresConectados(idPartida: string): Observable<JugadorPartida[]>{
+    return this.firestore
+      .collection<JugadorPartida>(`/partida/${idPartida}/jugadores`).valueChanges();
   }
 
 }

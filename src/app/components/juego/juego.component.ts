@@ -9,6 +9,8 @@ import { ConfiguracionService } from 'src/app/services/configuracion.service';
 import { takeWhile, tap, timer, Subscription } from 'rxjs';
 import { Partida } from '../../interfaces/partida';
 import { PartidaService } from '../../services/partida.service';
+import { JugadorPartida } from '../../interfaces/jugador-partida';
+import { JugadoresService } from '../../services/jugadores.service';
 
 @Component({
   selector: 'app-juego',
@@ -27,10 +29,12 @@ export class JuegoComponent implements OnInit, OnDestroy {
   public respuestaCorrecta: any;
   public partida: Partida;
   public suscripciones: Subscription;
+  public listaParticpantes: JugadorPartida[] = [];
   constructor(private fb: FormBuilder,
     private _partidaService: PartidaService,
     private _ItemService: ItemService,
     private _ItemDetService: ItemdetService,
+    private jugadoresService: JugadoresService,
     private router: Router) {
     this.suscripciones = new Subscription();
     this.partida = <Partida>this.router.getCurrentNavigation()!.extras.state;
@@ -41,6 +45,10 @@ export class JuegoComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getItemByIdConfiguracion();
+    if (this.partida != null) {
+      this.jugadoresService.obtenerJugadoresConectados(this.partida.id!)
+      .subscribe(data => this.listaParticpantes = data);
+    }
   }
 
   ngOnDestroy(): void {

@@ -14,7 +14,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let jugador of jugadores; let i = index" [ngClass]="{'table-primary': i === 0}" class="table-primary">
+                  <tr *ngFor="let jugador of jugadores; let i = index" [ngClass]="{'table-success': i === 0, 'table-primary': i === 1, 'table-secondary': i === 2}" class="table-primary">
                     <th>{{i + 1}}</th>
                     <td>{{jugador.nombre}}</td>
                     <td>{{jugador.puntaje}}</td>
