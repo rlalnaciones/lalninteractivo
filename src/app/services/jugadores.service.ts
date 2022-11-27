@@ -44,7 +44,7 @@ export class JugadoresService {
 
   public obtenerJugadoresConectados(idPartida: string): Observable<JugadorPartida[]>{
     return this.firestore
-      .collection<JugadorPartida>(`/partida/${idPartida}/jugadores`).valueChanges();
+      .collection<JugadorPartida>(`/partida/${idPartida}/jugadores`, ref => ref.orderBy('fechaRegistro', 'desc')).valueChanges();
   }
 
 }

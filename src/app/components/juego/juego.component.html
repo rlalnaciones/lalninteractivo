@@ -7,12 +7,11 @@
     <div class="card">
         <div class="card-body">
             <h2 class="text-center text-primary"> <strong>{{ partida.partida }}</strong></h2>
+            <h2 class="text-center text-primary">Partida No. <strong>{{ partida.id_partida }}</strong></h2>
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
               <button type="button" class="btn btn-primary btn-lg" (click)="iniciarPartida()">Empezar!!!</button>
             </div>
-            <h2 class="text-center text-success">Alumnos conectados.</h2>
-            <h2 class="text-center text-primary">Partida No. <strong>{{ partida.id_partida }}</strong></h2>
-
+            <h2 class="text-center text-success">Alumnos conectados: <strong>{{listaParticpantes.length}}</strong></h2>
             <ul class="list-group list-group-flush">
               <li *ngFor="let participante of listaParticpantes;" class="list-group-item"><h2 class="text-center">{{participante.nombre}}</h2></li>
             </ul>

@@ -36,7 +36,11 @@ export class PartidaBienvenidaComponent implements OnInit, OnDestroy {
     this.datosPartida = this.fb.group({
       nombreJugador: [null, [Validators.required, Validators.maxLength(20), Validators.minLength(5)]],
       idPartida: [null, Validators.required]
-    })
+    });
+
+    this.nombreJugador?.valueChanges.subscribe(nombre => {
+      this.nombreJugador?.patchValue(this.nombreJugador.value.toUpperCase(), {emitEvent: false})
+    });
   }
 
   ngOnDestroy(): void {
@@ -61,7 +65,8 @@ export class PartidaBienvenidaComponent implements OnInit, OnDestroy {
           if (!result) {
             const grJugador: JugadorPartida = {
               nombre: this.nombreJugador?.value,
-              puntaje: 0
+              puntaje: 0,
+              fechaRegistro: new Date()
             };
 
             sessionStorage.setItem("id_partida", String(this.partida?.id_partida));
@@ -96,36 +101,6 @@ export class PartidaBienvenidaComponent implements OnInit, OnDestroy {
       .subscribe()
     );
   }
-
-  obtenerIdDocPartida() {
-    const configuracion: any = {
-      jugador: this.datosPartida.value.jugador,
-      id_partida: this.datosPartida.value.id_partida
-    }
-    this._partidaService.getPartidaByIdPartida(Number(configuracion.id_partida))
-      .pipe(
-        tap((partida: any) => {
-          const grJugador: JugadorPartida = {
-            nombre: configuracion.jugador,
-            puntaje: 0
-          };
-          sessionStorage.setItem("id_partida", partida.data.id_partida);
-          sessionStorage.setItem("jugador", configuracion.jugador);
-          sessionStorage.setItem("idConfiguracion", partida.data.id_configuracion);
-
-          let jugador = this._jugadoresService.agregarJugador(partida.id, grJugador);
-          jugador.then(result => {
-            this.router.navigate(['/juegouser'])
-          }).catch(error => {
-            this.loading = false;
-            this.mensaje = "Verifica el código ingresado";
-            this.element = true;
-          });
-        })
-      )
-      .subscribe();
-  }
-
 
   public get idPartida() {
     return this.datosPartida.get('idPartida');

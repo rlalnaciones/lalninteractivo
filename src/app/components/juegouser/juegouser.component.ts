@@ -108,7 +108,7 @@ export class JuegouserComponent implements OnInit {
 
   }
   getItemByIdConfiguracion() {
-    //PREGUNTAS 
+    //PREGUNTAS
     // console.log('preguntas - estado', this.estadoPartida);
 
     if (this.idConfiguracion != null && this.estadoPartida == 2) {
@@ -144,7 +144,6 @@ export class JuegouserComponent implements OnInit {
         nombre: this.jugador,
         puntaje: this.punteoAcumulado
       };
-      //console.log('punteo acumulado', this.punteoAcumulado);
 
       this._partidaService.getPartidaByIdPartida(Number(this.idPartida))
         .pipe(
