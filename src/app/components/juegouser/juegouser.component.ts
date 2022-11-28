@@ -42,6 +42,7 @@ export class JuegouserComponent implements OnInit {
   mensaje: string = '';
   mensajeEstado2: string = '';
   estadoPartida = 0;
+  public btnColor: string='btn-danger';
   public tiempoRestante!: number;
   public mostrarRespuesta: boolean = false;
   public respuestaCorrecta: any;

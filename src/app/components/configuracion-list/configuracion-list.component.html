@@ -27,7 +27,7 @@
                             <button type="button" class="btn" [routerLink]="['/juegoPreview',Configuracion.id]" title="Vista previa">
                               <i class="fas fa-search"></i>
                             </button>
-                            <button type="button" class="btn" [routerLink]="['/partidaCreate']" title="Crear partida">
+                            <button type="button" class="btn" (click)="crearPartida(Configuracion)" title="Crear partida">
                               <i class="fas fa-plus-circle"></i>
                             </button>
                             <button type="button" class="btn" [routerLink]="['/configuracionEdit',Configuracion.id]" title="Editar">

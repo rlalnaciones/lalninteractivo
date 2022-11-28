@@ -1,18 +1,31 @@
+<script></script>
 <div class="container mt-4">
-    <div *ngIf="this.estadoPartida == 1" class="card-body mt-5">
+    <div *ngIf="this.idPartida" class="card-header">
+        <table>
+            <td>
+                <h5 class="text-center"> Jugador: {{this.jugador}}  </h5>
+            </td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td>
+                <h5 class="text-center"> Partida: {{this.idPartida}} </h5>
+            </td>
+        </table>
+    </div>
+    <div *ngIf="this.estadoPartida == 1" class="card-body ">
         <button class="btn btn-danger" style="width: 100%; height: 100% ;" type="button" disabled>
-            {{ this.mensaje }} 
+            {{ this.mensaje }}
         </button>
     </div>
-    <div *ngIf="this.estadoPartida == 2 && loading " class="card-body mt-5">
+    <div *ngIf="this.estadoPartida == 2 && loading " class="card-body ">
         <button class="btn btn-danger" style="width: 100%; height: 100% ;" type="button" disabled>
             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            {{ this.mensaje }} 
+            {{ this.mensaje }}
         </button>
     </div>
-    <div *ngIf="this.estadoPartida == 3 && loading" class="card-body mt-5">
-        <h3 *ngIf="this.punteoAcumulado>0 " >¡¡¡Felicidades!!! Puntaje Obtenido: {{ this.punteoAcumulado }}</h3>
-        <h3 *ngIf="this.punteoAcumulado===0 ">Gracias por participar,  Puntaje Obtenido: {{ this.punteoAcumulado }}  Repasa la lección y vuelve a intentarlo! </h3>
+    <div *ngIf="this.estadoPartida == 3 && loading" class="card-body ">
+        <h3 *ngIf="this.punteoAcumulado>0 ">¡¡¡Felicidades!!! Puntaje Obtenido: {{ this.punteoAcumulado }}</h3>
+        <h3 *ngIf="this.punteoAcumulado===0 ">Gracias por participar, Puntaje Obtenido: {{ this.punteoAcumulado }}
+            Repasa la lección y vuelve a intentarlo! </h3>
     </div>
     <div *ngIf="!loading" class="card">
         <div class="card-body">

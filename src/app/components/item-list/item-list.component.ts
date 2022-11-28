@@ -26,13 +26,13 @@ export class ItemListComponent implements OnInit {
           ...element.payload.doc.data()
         })
       });
-      console.log(this.items );
+      //console.log(this.items );
     })
   }
   
   eliminar(id: string) {
   this._itemService.eliminarItem(id).then(() => {
-    console.log('Item eliminado con exito');
+    //console.log('Item eliminado con exito');
     this.toastr.error('Configuracion eliminado con exito','Registro Eliminado', {positionClass: 'toast-bottom-right'});
   }).catch(error => {
   console.log(error);

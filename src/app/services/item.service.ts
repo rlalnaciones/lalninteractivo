@@ -44,7 +44,7 @@ export class ItemService {
 //     }
 
     getItemByIdConfiguracion(idConfiguracion: number | null, estado:number | null): Observable<any> {
-      console.log(idConfiguracion);
+      //console.log(idConfiguracion);
       if (estado==0){
         return this.firestore.collection('item',ref => ref.where('id_configuracion',"==",idConfiguracion)).valueChanges();
       }
