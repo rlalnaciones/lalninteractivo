@@ -44,7 +44,7 @@ export class JuegoComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.getItemByIdConfiguracion();
+    //this.getItemByIdConfiguracion();
     if (this.partida != null) {
       this.jugadoresService.obtenerJugadoresConectados(this.partida.id!)
       .subscribe(data => this.listaParticpantes = data);
@@ -70,8 +70,10 @@ export class JuegoComponent implements OnInit, OnDestroy {
 
   public iniciarPartida(): void {
     this.partida.estado = 2; //Pasa a estar en juego
+    this.indiceActual = -1;
     this._partidaService.actualizarPartida(this.partida.id!, this.partida)
       .then(() => {
+        this.getItemByIdConfiguracion();
         this.bienvenida = !this.bienvenida;
       });
 

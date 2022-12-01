@@ -85,7 +85,7 @@ export class JuegouserComponent implements OnInit {
               ...element.payload.doc.data()
             })
           });
-          console.log(this.partidas[0].estado);
+         // console.log(this.partidas[0].estado);
           this.estadoPartida = this.partidas[0].estado;
           this.getItemByIdConfiguracion();
         })
@@ -100,7 +100,7 @@ export class JuegouserComponent implements OnInit {
           tap(partida => {
             this.tiempoTotal = partida.tiempoTotal
             this.estadoPartida = partida.estado
-            console.log('this.estadoPartida ', this.estadoPartida);
+           //console.log('this.estadoPartida ', this.estadoPartida);
           }
           )
         )
