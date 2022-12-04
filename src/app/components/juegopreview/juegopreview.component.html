@@ -13,12 +13,21 @@
             <!-- <div *ngFor="let respuesta of respuestas; let i = index" [attr.data-index]="i" (click)="siguientePregunta()" -->
                 <div *ngFor="let respuesta of respuestas; let i = index" [attr.data-index]="i" 
                 class="Basic mixed styles example col-12">
-                <div class="btn col-12" 
-                    [ngClass]="{'btn-danger': i==0 || i==5, 'btn-warning': i==1||i==9, 'btn-primary': i==2||i==7, 
-                    'btn-success': i==3||i==8, 'btn-dark': i==4||i==6}">
-                    <span style="font-size:40px;font-weight:bold; text-align: left;">{{i+1}}. </span>
-                    <label style="font-size:40px;font-weight:bold;">{{ respuesta.item_det }}</label>
-                </div>
+               <table>
+                <tr>
+                    <td style="width: 80% !important;"><div class="btn col-12" 
+                        [ngClass]="{'btn-danger': i==0 || i==5, 'btn-warning': i==1||i==9, 'btn-primary': i==2||i==7, 
+                        'btn-success': i==3||i==8, 'btn-dark': i==4||i==6}">
+                        <span style="font-size:40px;font-weight:bold; text-align: left;">{{i+1}}. </span>
+                        <label style="font-size:40px;font-weight:bold;">{{ respuesta.item_det }}</label>
+                    </div>
+                </td>
+                    <td style="width: 20% !important;"> <h3 > &nbsp;{{ respuesta.valor_esperado }}</h3>
+                    </td>
+                </tr>
+               </table>
+                
+               
             </div>
         </div>
     </div>

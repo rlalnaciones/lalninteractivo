@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Item } from 'src/app/interfaces/item';
 import { ItemService } from 'src/app/services/item.service';
 
 @Component({
@@ -10,7 +12,8 @@ import { ItemService } from 'src/app/services/item.service';
 export class ItemListComponent implements OnInit {
   items: any[] = [];
   constructor(private _itemService: ItemService,
-    private toastr: ToastrService) { }
+    private toastr: ToastrService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.getItems();
@@ -37,5 +40,9 @@ export class ItemListComponent implements OnInit {
   }).catch(error => {
   console.log(error);
   })
+  }
+
+  agregarRespuestas(item: Item): void {
+    this.router.navigate(['/itemdetCreate'], { state: item })
   }
 }

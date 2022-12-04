@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Item } from 'src/app/interfaces/item';
 import { ItemdetService } from 'src/app/services/itemdet.service';
 
 @Component({
@@ -14,7 +15,10 @@ export class ItemdetCreateComponent implements OnInit {
   submitted = false;
   loading = false;
   id : string | null;
+  idItemDet: number =  0 ;
   titulo = 'Agregar Respuestas';
+  pregunta='';
+  public item: Item;
 
   constructor(private fb: FormBuilder,
     private _itemdetService: ItemdetService,
@@ -22,13 +26,25 @@ export class ItemdetCreateComponent implements OnInit {
     private toastr: ToastrService,
     private aRoute: ActivatedRoute) { 
       this.itemdetCreate = this.fb.group({
-        id_item: ['11', Validators.required],
-        id_item_det: ['', Validators.required],
+        id_item: [0, Validators.required],
+        id_item_det: [this.idItemDet, Validators.required],
         item_det: ['', Validators.required],
         valor_esperado: ['0', Validators.required]
       })
       this.id = this.aRoute.snapshot.paramMap.get("id");
-      console.log(this.id);
+      //console.log(this.id);
+      this.item = <Item>this.router.getCurrentNavigation()!.extras.state;
+    //console.log('configuracion',this.configuracion );
+    if (this.item) {
+      this.pregunta = this.item.item;
+      //si es creacion se toman los datos que vienen de la pregunta
+     this.itemdetCreate = this.fb.group({
+      id_item: [this.item.id_item, Validators.required],
+        id_item_det: [this.idItemDet, Validators.required],
+        item_det: ['', Validators.required],
+        valor_esperado: [0, Validators.required]
+    })
+    }
     }
 
   ngOnInit(): void {
@@ -60,6 +76,7 @@ export class ItemdetCreateComponent implements OnInit {
     this._itemdetService.agregarItemdet(Itemdet).then(() =>{
       //this.toastr.success('Respuestas registrado con éxito!','Itemdet registrado',{positionClass:'toast-bottom-right'});
       this.loading = false;
+      this.idItemDet = this.idItemDet + 1;
       //this.router.navigate(['/itemdetList'])
       
     }).catch(error => {

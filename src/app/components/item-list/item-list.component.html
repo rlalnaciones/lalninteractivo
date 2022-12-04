@@ -13,7 +13,7 @@
                     <th>id_item</th>
                     <th>item</th>
                     <th >id_configuracion</th>
-                    <th >id_tipo_respuesta</th>
+                    <!-- <th >id_tipo_respuesta</th> -->
                     <th >estado</th>
                     <th >Editar</th>
                     <th >Eliminar</th>
@@ -25,11 +25,14 @@
                     <td>{{ item.id_item }}</td>
                     <td>{{ item.item }}</td>
                     <td>{{ item.id_configuracion }}</td>
-                    <td>{{ item.id_tipo_respuesta }}</td>
+                    <!-- <td>{{ item.id_tipo_respuesta }}</td> -->
                     <td>{{ item.estado }}</td>
                     <!-- <td><i class="fas fa-puzzle-piece fa-lg mr-2" [routerLink]="['/juego',item.id]" title="Vista previa"></i></td> -->
                       <!-- <td><i class="fas fa-plus-circle" [routerLink]="['/item-create']" title="Crear Respuesta"></i></td> -->
                         <td><i class="fas fa-edit fa-lg text-info mr-2" [routerLink]="['/itemEdit',item.id]" title="Editar"></i></td>
+                        <button type="button" class="btn" (click)="agregarRespuestas(item)" title="Crear Respuesta">
+                          <i class="fas fa-plus-circle"></i>
+                        </button>
                           <!-- <td><i class="fas fa-edit fa-lg text-info mr-2" routerLink="/itemdet-list" title="Ver / Agregar preguntas">Preguntas</i> -->
                             <td><i (click)="eliminar(item.id)" class="fas fa-trash-alt fa-lg text-danger" title="Eliminar"></i></td>
                     
