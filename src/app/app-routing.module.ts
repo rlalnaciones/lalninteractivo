@@ -33,7 +33,7 @@ const routes: Routes = [
   { path: 'tablero-partida/:idPartida',component:PuntajePartidaComponent},
   { path: 'partida-bienvenida',  component:PartidaBienvenidaComponent },
   { path: 'juegoPreview/:id', component:JuegopreviewComponent },
-  { path: '**', redirectTo: 'configuracion-list', pathMatch: 'full' },
+  // { path: '**', redirectTo: 'configuracion-list', pathMatch: 'full' },
   { path: '**', redirectTo: 'partida-bienvenida', pathMatch: 'full' }
 
 ];
