@@ -68,12 +68,17 @@ export class JuegouserComponent implements OnInit {
     this.loading = true;
     this.mensaje = `¡¡Bienvenid@!!  ${this.jugador.toUpperCase()} por favor espera un momento mientras otros amiguitos se unen para empezar!!`;
     this.getPartida()
+    this.deshabilitaRetroceso()
   }
 
   ngOnDestroy(): void {
     this.suscripciones.unsubscribe();
   }
-
+  deshabilitaRetroceso(){
+    window.location.hash="no-back-button";
+    window.location.hash="Again-No-back-button" //chrome
+    window.onhashchange=function(){window.location.hash="no-back-button";}
+  }
   getPartida() {
     this.suscripciones.add(
       this._partidaService.getPartidas(Number(this.idPartida)).subscribe(
